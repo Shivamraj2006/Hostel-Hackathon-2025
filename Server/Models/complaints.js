@@ -35,6 +35,7 @@ const complaintSchema = new mongoose.Schema({
     ResolvedDate: {
         type: String,
         required: true,
+        default: "00-00-0000"
     },
 
     Specifications: {
