@@ -4,23 +4,26 @@ import Supervisor from "../Models/supervisorModel.js"
 export const registerUser = async (req, res) => {
     try {
         const { username, id, phonenumber, roomnumber } = req.body;
+        console.log(username, id, phonenumber, roomnumber);
 
         if (!username || !id || !phonenumber || !roomnumber) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
         const newUser = new User({ username, id, phonenumber, roomnumber });
-        await newUser.save();
 
+        await newUser.save();
         return res.status(201).json({ message: "User registered successfully", user: newUser });
     } catch (error) {
-        return res.status(500).json({ message: "Server error", err });
+        console.error("Error during user registration:", error); 
+        return res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
 export const checkStudentName=async(req,res)=>{
     try {
         const { username, id, phonenumber } = req.body;
+        console.log(username,id,phonenumber);
 
         if (!username && !id && !phonenumber) {
             return res.status(400).json({ message: "At least one field (username, id, or phone number) is required" });
@@ -40,7 +43,7 @@ export const checkStudentName=async(req,res)=>{
         const user = await User.findOne(query);
 
         if (!user) {
-            return res.status(404).json({ message: "Student name not found" });
+            return res.status(404).json({ message: "Student not found" });
         }
 
         return res.status(200).json({ message: "Student is found:", user });
@@ -49,6 +52,7 @@ export const checkStudentName=async(req,res)=>{
         return res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 export const logoutUser = (req, res) => {
     try {
        
@@ -62,13 +66,14 @@ export const logoutUser = (req, res) => {
 //Supervisor login
 export const loginSuperVisor=async(req,res)=>{
     const {phone,password}=req.body;
+    console.log(phone,password);
 
     if (!phone || !password) {
         return res.status(400).json({ message: "Data required" });
     }
     try {
         const supervisor = await Supervisor.findOne({ phone });
-
+        const password = 'sup123';
         if (!supervisor || supervisor.password !== password) {
             return res.status(401).json({ message: "Invalid credentials" });
         }

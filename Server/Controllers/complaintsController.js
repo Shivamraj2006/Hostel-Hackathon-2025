@@ -38,7 +38,7 @@ export const getActiveComplaints = async (req, res) => {
 };
 
 export const createComplaint = async (req, res) => {
-    const { ID, RoomNo, PhoneNo, UserName, Category, ComplaintDate, ResolvedDate, Specifications, PreferableTime, Discription } = req.body;
+    const { ID, RoomNo, PhoneNo, UserName, Category, ComplaintDate, ResolvedDate, Specifications, PreferableTime, Discription, Image } = req.body;
 
     console.log('Incoming Request Body:', req.body);
 
@@ -61,6 +61,7 @@ export const createComplaint = async (req, res) => {
         PreferableTime,
         Discription,
         Status: req.body.Status || false,
+        Image: req.body.Image || false,
     });
 
     try {
@@ -123,25 +124,28 @@ export const editComplaint = async (req, res) => {
 };
 
 export const updateStatus = async (req, res) => {
-    const { complaintId } = req.params;
+    const complaintId = req.params.id; 
+    console.log(complaintId);
 
     const now = new Date();
     const currentDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
 
     try {
         const complaint = await Complaints.findById(complaintId);
-
+    
         if (!complaint) {
             return res.status(404).json({ message: `Complaint with ID ${complaintId} not found` });
         }
-
+    
         const updatedComplaint = await Complaints.findByIdAndUpdate(
             complaintId,
-            { Status: !complaint.Status },
-            { ResolvedDate: currentDate },
+            {
+                Status: !complaint.Status,
+                ResolvedDate: currentDate  
+            },
             { new: true } 
         );
-
+    
         res.status(200).json({
             message: `Complaint with ID ${complaintId} updated successfully`,
             data: updatedComplaint,
@@ -151,6 +155,7 @@ export const updateStatus = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
 
 // Supervisor Routes Controller
 
@@ -173,9 +178,11 @@ export const viewComplaint = async (req, res) => {
 
 export const viewActiveComplaint = async (req, res) => {
     const { category } = req.params;
+    console.log(category);
 
     try {
         const complaints = await Complaints.find({Category: category , Status: false}).sort({ ComplaintDate: 1 });
+        console.log(complaints);
 
         if (complaints.length === 0) {
             return res.status(404).json({ message: 'No Active Complaints found' });

@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+import Message from '../Models/Message.js';
+
 export const getMessage=async(req,res)=>{
     try{
         const messages=await Message.find().sort({createdAt:-1});

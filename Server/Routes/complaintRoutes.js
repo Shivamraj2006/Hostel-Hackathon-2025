@@ -13,6 +13,6 @@ router.patch('/update/:id', updateStatus);
 
 // admin routes
 router.get('/supervisor/all/:category', viewComplaint );
-router.get('supervisor/active/:category', viewActiveComplaint);
+router.get('/supervisor/active/:category', viewActiveComplaint);
 
 export default router;

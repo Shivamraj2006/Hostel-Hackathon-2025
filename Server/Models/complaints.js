@@ -59,7 +59,8 @@ const complaintSchema = new mongoose.Schema({
         default: false,
     },
     Image: { 
-        type: String 
+        type: String,
+        required: false
     },
 });
 
