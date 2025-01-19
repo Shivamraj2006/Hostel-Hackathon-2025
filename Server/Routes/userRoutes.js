@@ -1,11 +1,12 @@
 import express from"express";
-import {checkStudentName, registerUser, logoutUser} from '../Controllers/authcontrollers';
+import { checkStudentName, registerUser, logoutUser } from '../Controllers/authController.js';
+
 
 const router=express.Router();
 
 router.post("/register", registerUser);
 
-router.post("/check-student-details", checkStudentName);
+router.post("/login", checkStudentName);
 
 router.post('/logout', logoutUser);
 

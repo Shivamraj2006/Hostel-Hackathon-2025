@@ -11,7 +11,7 @@ app.use(express.json());
 connectDB();
 
 app.use('/complaints', complaintRoutes); 
-app.use("/api/users", userRoutes);
+app.use("/users", userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
