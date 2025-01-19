@@ -1,4 +1,5 @@
 import User from "../Models/Users.js";
+import Supervisor from "../Models/supervisorModel.js"
 
 export const registerUser = async (req, res) => {
     try {
@@ -57,3 +58,27 @@ export const logoutUser = (req, res) => {
         return res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+//Supervisor login
+export const loginSuperVisor=async(req,res)=>{
+    const {phone,password}=req.body;
+
+    if (!phone || !password) {
+        return res.status(400).json({ message: "Data required" });
+    }
+    try {
+        const supervisor = await Supervisor.findOne({ phone });
+
+        if (!supervisor || supervisor.password !== password) {
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
+
+        
+        res.status(200).json({  message: "Login successful" });
+    } catch (err) {
+        res.status(500).json({ message: "Internal server error" ,err});
+    }
+};
+//supervisor logout
+export const logoutSuperVisor=async(req,res)=>{
+    res.status(200).json({ message: "Logged out successfully" });
+}
