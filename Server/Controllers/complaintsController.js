@@ -125,6 +125,9 @@ export const editComplaint = async (req, res) => {
 export const updateStatus = async (req, res) => {
     const { complaintId } = req.params;
 
+    const now = new Date();
+    const currentDate = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+
     try {
         const complaint = await Complaints.findById(complaintId);
 
@@ -135,6 +138,7 @@ export const updateStatus = async (req, res) => {
         const updatedComplaint = await Complaints.findByIdAndUpdate(
             complaintId,
             { Status: !complaint.Status },
+            { ResolvedDate: currentDate },
             { new: true } 
         );
 
@@ -150,7 +154,7 @@ export const updateStatus = async (req, res) => {
 
 // Supervisor Routes Controller
 
-export const viewComplaints = async (req, res) => {
+export const viewComplaint = async (req, res) => {
     const { category } = req.params;
 
     try {
@@ -167,7 +171,7 @@ export const viewComplaints = async (req, res) => {
     }
 };
 
-export const viewActiveComplaints = async (req, res) => {
+export const viewActiveComplaint = async (req, res) => {
     const { category } = req.params;
 
     try {

@@ -58,6 +58,7 @@ export const logoutUser = (req, res) => {
         return res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 //Supervisor login
 export const loginSuperVisor=async(req,res)=>{
     const {phone,password}=req.body;
@@ -78,6 +79,7 @@ export const loginSuperVisor=async(req,res)=>{
         res.status(500).json({ message: "Internal server error" ,err});
     }
 };
+
 //supervisor logout
 export const logoutSuperVisor=async(req,res)=>{
     res.status(200).json({ message: "Logged out successfully" });

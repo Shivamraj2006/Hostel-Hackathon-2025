@@ -58,6 +58,9 @@ const complaintSchema = new mongoose.Schema({
         required: true,
         default: false,
     },
+    Image: { 
+        type: String 
+    },
 });
 
 const Complaints = mongoose.model('Complaint', complaintSchema);
