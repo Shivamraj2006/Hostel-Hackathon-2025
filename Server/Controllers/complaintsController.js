@@ -1,4 +1,6 @@
 import Complaints from '../Models/complaints.js';
+import mongoose from 'mongoose';
+
 
 export const getComplaints = async (req, res) => {
     const { id } = req.params;
@@ -37,10 +39,13 @@ export const getActiveComplaints = async (req, res) => {
 export const createComplaint = async (req, res) => {
     const { ID, RoomNo, PhoneNo, UserName, Category, ComplaintDate, ResolvedDate, Specifications, PreferableTime, Discription } = req.body;
 
-    // Validation (Example: Checking required fields)
+    console.log('Incoming Request Body:', req.body);
+
     if (!ID || !RoomNo || !PhoneNo || !UserName || !Category || !ComplaintDate || !ResolvedDate || !Specifications) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
+
+    console.log('Parameters:', { ID, RoomNo, PhoneNo, UserName, Category, ComplaintDate, ResolvedDate, Specifications, PreferableTime, Discription });
 
     const newComplaint = new Complaints({
         ID,
@@ -53,7 +58,7 @@ export const createComplaint = async (req, res) => {
         Specifications,
         PreferableTime,
         Discription,
-        Status: req.body.Status || false, // Use provided value or default to false
+        Status: req.body.Status || false,
     });
 
     try {
@@ -67,7 +72,8 @@ export const createComplaint = async (req, res) => {
 
 export const deleteComplaint = async (req, res) => {
     const { id } = req.params; 
-
+    console.log('Deleting complaint with ID:', id);
+    
     try {
         const deletedComplaints = await Complaints.findByIdAndDelete(id);
 
@@ -90,11 +96,14 @@ export const editComplaint = async (req, res) => {
         if (!complaintId) {
             return res.status(400).json({ message: 'Complaint ID is required.' });
         }
+        if (!mongoose.Types.ObjectId.isValid(complaintId)) {
+            return res.status(400).json({ message: 'Invalid Complaint ID format.' });
+        }
 
-        const updatedComplaint = await Complaints.findByIdAndUpdate(
-            complaintId, 
-            { $set: updateData },
-            { new: true } 
+        const updatedComplaint = await Complaints.findOneAndUpdate(
+            { _id: complaintId },  
+            { $set: updateData }, 
+            { new: true }
         );
 
         if (!updatedComplaint) {

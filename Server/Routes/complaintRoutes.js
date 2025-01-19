@@ -7,6 +7,6 @@ router.get('/all/:id', getComplaints);
 router.get('/active/:id', getActiveComplaints);
 router.post('/create', createComplaint);  
 router.delete('/delete/:id', deleteComplaint);
-router.patch('/edit/:id', editComplaint);
+router.put('/edit/:id', editComplaint);
 
 export default router;
